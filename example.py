@@ -61,12 +61,13 @@ def main():
     #     input_data[i] = int(input_data[i])
 
     # Reading data from casa_tables i is the index of datafile
+
+    parameters, constraints = Parser.parse(open("./data_file_example.txt"))
     t_value = 2
     i = 23
-    input_data, constraints = data_converter(str(i))
 
     # Computing
-    program = Cit.Cit(input_data, t_value, constraints, True)
+    program = Cit.Cit(parameters, t_value, constraints, True)
     # start_time = time.process_time()
     final_list = program.compute()
 
