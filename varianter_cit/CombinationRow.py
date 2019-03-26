@@ -2,12 +2,12 @@ import itertools
 
 
 class CombinationRow:
-
     """
     Row object store all combinations between two parameters into dictionary.
     Keys in dictionary are values of combinations and values in dictionary are information about coverage
     Row object has information how many combinations are ucovered and how many of them are covered more than ones
     """
+
     def __init__(self, input_data, t_value, parameters):
         """
 
@@ -35,11 +35,12 @@ class CombinationRow:
         old_uncovered = self.uncovered
         old_covered_more_than_ones = self.covered_more_than_ones
         value = self.hash_table[tuple(key)]
-        if value == 0:
-            self.uncovered -= 1
-        elif value == 1:
-            self.covered_more_than_ones += 1
-        self.hash_table[tuple(key)] += 1
+        if value is not None:
+            if value == 0:
+                self.uncovered -= 1
+            elif value == 1:
+                self.covered_more_than_ones += 1
+            self.hash_table[tuple(key)] += 1
 
         return self.uncovered - old_uncovered, self.covered_more_than_ones - old_covered_more_than_ones
 
@@ -52,11 +53,12 @@ class CombinationRow:
         old_uncovered = self.uncovered
         old_covered_more_than_ones = self.covered_more_than_ones
         value = self.hash_table[tuple(key)]
-        if value == 1:
-            self.uncovered += 1
-        elif value == 2:
-            self.covered_more_than_ones -= 1
-        self.hash_table[tuple(key)] -= 1
+        if value is not None and value > 0:
+            if value == 1:
+                self.uncovered += 1
+            elif value == 2:
+                self.covered_more_than_ones -= 1
+            self.hash_table[tuple(key)] -= 1
 
         return self.uncovered - old_uncovered, self.covered_more_than_ones - old_covered_more_than_ones
 
@@ -92,7 +94,7 @@ class CombinationRow:
         :param key: combination to valid
         """
         key = tuple(key)
-        if self.hash_table.get(key, 0)is None:
+        if self.hash_table.get(key, 0) is None:
             return False
         else:
             return True
