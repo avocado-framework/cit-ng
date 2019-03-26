@@ -39,6 +39,8 @@ class Solver:
             if p.is_full:
                 array = p.get_constraints()
                 con = list(itertools.product(*array))
+                if len(con) == 0:
+                    raise ValueError("Constraints are not satisfiable")
                 for constraint in con:
                     constraint_array = set()
                     for c in range(len(constraint)):
