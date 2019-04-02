@@ -179,3 +179,8 @@ class CombinationMatrix:
         :return: CombinationRow
         """
         return self.hash_table[tuple(key)]
+
+    def __eq__(self, other):
+        return (self.total_uncovered == other.total_uncovered and
+                self.total_covered_more_than_ones == other.total_covered_more_than_ones and
+                self.hash_table == other.hash_table)
