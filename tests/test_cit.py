@@ -18,16 +18,16 @@ class CitInitialization(unittest.TestCase):
         combination_matrix = CombinationMatrix(parameters, t_value)
         solver.clean_hash_table(combination_matrix, t_value)
         cit = Cit(parameters, t_value, constraints)
-        self.assertTrue(combination_matrix == cit.combination_matrix, "The initialization of cit algorithm is wrong")
+        self.assertEqual(combination_matrix, cit.combination_matrix, "The initialization of cit algorithm is wrong")
 
 
 class CitTests(unittest.TestCase):
 
     def setUp(self):
-        self.parameters = [3, 3, 3, 3]
-        self.constraints = {(Pair(0, 0), Pair(2, 0)), (Pair(0, 1), Pair(1, 1), Pair(2, 0)), (Pair(0, 2), Pair(3, 2))}
-        self.t_value = 2
-        self.cit = Cit(self.parameters, self.t_value, self.constraints)
+        parameters = [3, 3, 3, 3]
+        constraints = {(Pair(0, 0), Pair(2, 0)), (Pair(0, 1), Pair(1, 1), Pair(2, 0)), (Pair(0, 2), Pair(3, 2))}
+        t_value = 2
+        self.cit = Cit(parameters, t_value, constraints)
 
     def test_create_random_row_with_constraints(self):
         for i in range(0, 10):
@@ -56,14 +56,14 @@ class CitTests(unittest.TestCase):
         for row in final_matrix:
             combination_matrix.cover_solution_row(row)
         self.assertEqual(expected_total_uncovered, self.cit.combination_matrix.total_uncovered,
-                         "Final matrix don't cover all combinations but cit think that it does")
+                         "Final matrix don't cover all combinations but CIT thinks it does")
         self.assertEqual(expected_uncovered_rows, self.cit.combination_matrix.uncovered_rows,
-                         "Final matrix don't cover all combination rows but cit think that it does")
+                         "Final matrix don't cover all combination rows but CIT thinks it does")
 
     def test_change_one_value_random(self):
         final_matrix = self.cit.final_matrix_init()
         row, row_index, column_index = self.cit.change_one_value(final_matrix)
-        self.assertTrue(final_matrix[row_index][column_index[0]] != row[column_index[0]], "Value is not change")
+        self.assertNotEqual(final_matrix[row_index][column_index[0]], row[column_index[0]], "Value did not change")
         row[column_index[0]] = final_matrix[row_index][column_index[0]]
         self.assertEqual(final_matrix[row_index], row, "Different value was changed")
 
@@ -75,7 +75,7 @@ class CitTests(unittest.TestCase):
                                                                  column_index=expected_column_index)
         self.assertEqual(expected_column_index, column_index[0], "Column index is wrong")
         self.assertEqual(expected_row_index, row_index, "Row index is wrong")
-        self.assertTrue(final_matrix[row_index][column_index[0]] != row[column_index[0]], "Value is not change")
+        self.assertNotEqual(final_matrix[row_index][column_index[0]], row[column_index[0]], "Value did not change")
         row[column_index[0]] = final_matrix[row_index][column_index[0]]
         self.assertEqual(final_matrix[row_index], row, "Different value was changed")
 
@@ -88,12 +88,12 @@ class CitTests(unittest.TestCase):
         expected_total_uncovered = self.cit.combination_matrix.total_uncovered
         expected_uncovered_rows = copy(self.cit.combination_matrix.uncovered_rows)
         row, row_index, column_index = self.cit.change_one_column(final_matrix)
-        self.assertEqual(expected_total_uncovered, self.cit.combination_matrix.total_uncovered, "Coverage was changed")
+        self.assertEqual(expected_total_uncovered, self.cit.combination_matrix.total_uncovered, "Coverage was change")
         self.assertEqual(expected_total_covered_more_than_ones,
                          self.cit.combination_matrix.total_covered_more_than_ones,
-                         "Coverage was changed")
-        self.assertEqual(expected_uncovered_rows, self.cit.combination_matrix.uncovered_rows, "Coverage was changed")
-        self.assertTrue(final_matrix[row_index][column_index[0]] != row[column_index[0]], "Value is not change")
+                         "Coverage was change")
+        self.assertEqual(expected_uncovered_rows, self.cit.combination_matrix.uncovered_rows, "Coverage was change")
+        self.assertNotEqual(final_matrix[row_index][column_index[0]], row[column_index[0]], "Value did not change")
         row[column_index[0]] = final_matrix[row_index][column_index[0]]
         self.assertEqual(final_matrix[row_index], row, "Different value was changed")
 
@@ -115,13 +115,13 @@ class CitTests(unittest.TestCase):
         expected_total_uncovered = self.cit.combination_matrix.total_uncovered
         expected_uncovered_rows = copy(self.cit.combination_matrix.uncovered_rows)
         row, row_index, parameters = self.cit.cover_missing_combination(final_matrix)
-        self.assertEqual(expected_total_uncovered, self.cit.combination_matrix.total_uncovered, "Coverage was changed")
+        self.assertEqual(expected_total_uncovered, self.cit.combination_matrix.total_uncovered, "Coverage was change")
         self.assertEqual(expected_total_covered_more_than_ones,
                          self.cit.combination_matrix.total_covered_more_than_ones,
-                         "Coverage was changed")
-        self.assertEqual(expected_uncovered_rows, self.cit.combination_matrix.uncovered_rows, "Coverage was changed")
+                         "Coverage was change")
+        self.assertEqual(expected_uncovered_rows, self.cit.combination_matrix.uncovered_rows, "Coverage was change")
         self.assertTrue(final_matrix[row_index][parameters[0]] != row[parameters[0]] or
-                        final_matrix[row_index][parameters[1]] != row[parameters[1]], "Value is not change")
+                        final_matrix[row_index][parameters[1]] != row[parameters[1]], "Value did not change")
         row[parameters[0]] = final_matrix[row_index][parameters[0]]
         row[parameters[1]] = final_matrix[row_index][parameters[1]]
         self.assertEqual(final_matrix[row_index], row, "Different value was changed")
