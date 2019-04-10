@@ -108,3 +108,7 @@ class CombinationRow:
             if value == 0:
                 combinations.append(key)
         return combinations
+
+    def __eq__(self, other):
+        return (self.covered_more_than_ones == other.covered_more_than_ones and self.uncovered == other.uncovered and
+                self.hash_table == other.hash_table)
